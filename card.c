@@ -46,6 +46,7 @@ card *make_deck(void) {
             else if(k == 3) {nCard.suit = 'S';}
             else if(k == 4 || k > 4) {k = 0;}
         }
+        nCard.next = mallc(sizeof(card));
         deck[i] = nCard;
     }
     return deck;
