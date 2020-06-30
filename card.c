@@ -2,6 +2,7 @@
 
 void show(card *deck) {
     int size = count_deck(deck);
+    card ncard;
     for(int i = 0; i < size; i++) {
         printf("%d%c ", deck[i].rank,deck[i].suit);
     }
@@ -21,7 +22,6 @@ int total(card *card) {
 card *deal(card *deck) {
     int size = count_deck(deck);
     card *p2c = &deck[size - 1];
-    printf("%d%c ",p2c->rank, p2c->suit);
     deck[size - 1] = deck[size - 2];
     return p2c;
 }

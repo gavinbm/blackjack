@@ -2,17 +2,15 @@
 
  int main(void) {
     /* Your code goes here */
-    char *hit;
+    char hit;
     int playing = 1;
     card *deck = shuffle(make_deck());
     card *pDeck = deal(deck);
     card *dDeck = deal(deck);
-    int pSize, dSize;
+    int pSize = count_deck(pDeck), dSize;
 
-    pSize = count_deck(pDeck);
-    pDeck[pSize + 1] = *deal(deck);
-
-    while(playing) {
+    printf("Welcome to Reno!");
+    while(playing == 1) {
         if(total(dDeck) < 17) {
             while(total(dDeck) < 16) {
                 dSize = count_deck(dDeck);
@@ -23,19 +21,19 @@
         show(pDeck);
 
         printf("\nhit or stand?\n");
-        scanf("%s",hit);
+        scanf("%c",hit);
 
-        if(hit == "hit" || hit == "h" || hit == "H") {
-            while(hit == "hit") {
+        if(hit == 'h' || hit == 'H') {
+            while(hit == 'h' || hit == 'H') {
                 pSize = count_deck(pDeck);
                 pDeck[pSize + 1] = *deal(deck);
                 show(pDeck);
                 printf("hit again?\n");
-                scanf("%s",hit);
+                scanf("%c",hit);
             }
         }
 
-        else if(hit == "stand") {
+        else if(hit == 's' || hit == 'S') {
             printf("Players Cards: ");
             show(pDeck);
             printf("Dealers Cards: ");
