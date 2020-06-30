@@ -14,3 +14,4 @@ void destroy_deck(card *deck);
 card *deal(card *deck);
 int total(card *card);
 void show(card *card);
+void remove_element(card *array, int index, int size);

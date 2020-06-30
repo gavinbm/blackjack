@@ -1,8 +1,13 @@
 #include "card.h"
 
+void remove_element(card *deck, int index, int size)
+{
+   int i;
+   for(i = index; i < size - 1; i++) deck[i] = deck[i + 1];
+}
+
 void show(card *deck) {
     int size = count_deck(deck);
-    card ncard;
     for(int i = 0; i < size; i++) {
         printf("%d%c ", deck[i].rank,deck[i].suit);
     }
@@ -21,8 +26,9 @@ int total(card *card) {
 
 card *deal(card *deck) {
     int size = count_deck(deck);
-    card *p2c = &deck[size - 1];
-    deck[size - 1] = deck[size - 2];
+    card ncard = deck[size];
+    remove_element(deck, size, size);
+    card *p2c = &ncard;
     return p2c;
 }
 
