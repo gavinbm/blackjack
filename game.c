@@ -2,7 +2,7 @@
 
  int main(void) {
     /* Your code goes here */
-    char hit;
+    char *hit;
     int playing = 1;
     card *deck = shuffle(make_deck());
     card *pDeck = deal(deck);
@@ -21,19 +21,19 @@
         show(pDeck);
 
         printf("\nhit or stand?\n");
-        scanf("%c",hit);
+        scanf("%s",hit);
 
-        if(hit == 'h' || hit == 'H') {
-            while(hit == 'h' || hit == 'H') {
+        if(hit == "h" || hit == "H" || hit == "hit" || hit == "Hit") {
+            while(hit == "h" || hit == "H" || hit == "hit" || hit == "Hit") {
                 pSize = count_deck(pDeck);
                 pDeck[pSize + 1] = *deal(deck);
                 show(pDeck);
                 printf("hit again?\n");
-                scanf("%c",hit);
+                scanf("%s",hit);
             }
         }
 
-        else if(hit == 's' || hit == 'S') {
+        else if(hit == "s" || hit == "S" || hit == "stand" || hit == "Stand") {
             printf("Players Cards: ");
             show(pDeck);
             printf("Dealers Cards: ");
