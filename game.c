@@ -1,55 +1,68 @@
 #include "card.h"
 
  int main(void) {
-    /* Your code goes here */
-    char *hit;
-    int playing = 1;
-    card *deck = shuffle(make_deck());
-    card *pDeck = deal(deck);
-    card *dDeck = deal(deck);
-    int pSize = count_deck(pDeck), dSize;
+    
+ 	char *hit = "e";
+	int playing = 1;
+	card *deck;
+	card *player;
+	card *dealer;
+	int psize, dsize;
+	
+	while(playing) {
+	
+		/* Introduction */
+		printf("Welcome to Reno!");	
 
-    printf("Welcome to Reno!");
-    while(playing == 1) {
-        if(total(dDeck) < 17) {
-            while(total(dDeck) < 16) {
-                dSize = count_deck(dDeck);
-                dDeck[dSize + 1] = *deal(deck);
-            }
-        }
+		/* initializing variables at game start */
+		deck = shuffle(make_deck());
+		player = deal(deck);
+		dealer = deal(deck);
+		psize = count_deck(player);
+		dsize = count_deck(dealer);
+		
+		/* handling dealer deck */
+		if(total(dealer) < 17) {
+			dealer[dsize].next = deal(deck);
+		}
 
-        show(pDeck);
+		/* handling player deck */
+		show(player);
+		printf("Now that the dealer has their cards, (h)it or (s)tand?\n");
+		scanf("%s", hit);
 
-        printf("\nhit or stand?\n");
-        scanf("%s",hit);
+		if(hit == "h" || hit == "H" || hit == "hit" || hit == "Hit") {
+			while(hit == "h" || hit == "H" || hit == "hit" || hit == "Hit") {
+				player[psize].next = deal(deck);
+				printf("(h)it again?\n");
+				show(player);
+				scanf("%s", hit);
+			}
+		}
+		
+		else if(hit == "s" || hit == "S" || hit == "stand" || hit == "Stand") {
+			int pscore = total(player), dscore = total(dealer);
+			char *again;
+			if(pscore <= 21 && dscore <= 21) {
+				if(pscore > dscore) {printf("You win!");}
+				else if(dscore > pscore) {printf("You lose!");}
+				else {printf("Tie!");}
+			} else if(pscore > 21 && dscore > 21) {
+				printf("Double bust! No winner!");
+			} else if(pscore > 21 && dscore <= 21) {
+				printf("Player bust! Dealer wins!");
+			} else if(pscore <= 21 && dscore >21) {
+				printf("Dealer bust! You win!");
+			}
 
-        if(hit == "h" || hit == "H" || hit == "hit" || hit == "Hit") {
-            while(hit == "h" || hit == "H" || hit == "hit" || hit == "Hit") {
-                pSize = count_deck(pDeck);
-                pDeck[pSize + 1] = *deal(deck);
-                show(pDeck);
-                printf("hit again?\n");
-                scanf("%s",hit);
-            }
-        }
+			printf("Game over! Wanna play again? [y/n]\n");
+			scanf("%s", again);
 
-        else if(hit == "s" || hit == "S" || hit == "stand" || hit == "Stand") {
-            printf("Players Cards: ");
-            show(pDeck);
-            printf("Dealers Cards: ");
-            show(dDeck);
+			if (again == "y") {playing = 1;}
+			else {destroy_deck(deck); playing = 0;}
 
-            if(total(dDeck) > 21) {printf("Dealer Bust!, Player Wins!");}
-            if(total(pDeck) > 21) {printf("Player Bust!, Dealer Wins!");}
-            if(total(pDeck) > 21 && total(dDeck) > 21) {printf("Both bust! No winner!");}
+		}
 
-            if(total(pDeck) > total(dDeck)) {printf("Player Wins!");}
-            if(total(dDeck) >= total(pDeck)) {printf("Dealer Wins!");}
-
-            printf("Do you wanna play again? (1 for yes, 0 for no) ");
-            scanf("%d", &playing);
-        }
-    }
-
-    return 0;
+	}
+	return 0;	
  }

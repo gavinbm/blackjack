@@ -27,6 +27,7 @@ int total(card *card) {
 card *deal(card *deck) {
     int size = count_deck(deck);
     card ncard = deck[size];
+    printf("%d%c ", ncard.rank, ncard.suit);
     remove_element(deck, size, size);
     card *p2c = &ncard;
     return p2c;
@@ -38,22 +39,33 @@ void destroy_deck(card *deck) {
 
 card *make_deck(void) {
     card *deck = malloc(52 * sizeof(card));
-    card nCard;
 
     for(int i = 0; i < 52; i++) {
-        for(int j = 0; j < 13; j++) {
-            nCard.rank = j;
-            if(j == 13 || j > 13) {j = 0;}
-        }
-        for(int k = 0; k < 4; k++) {
-            if(k == 0) {nCard.suit = 'C';}
-            else if(k == 1) {nCard.suit = 'D';}
-            else if(k == 2) {nCard.suit = 'H';}
-            else if(k == 3) {nCard.suit = 'S';}
-            else if(k == 4 || k > 4) {k = 0;}
-        }
-        nCard.next = malloc(sizeof(card));
-        deck[i] = nCard;
+    	card *ncard = malloc(sizeof(card));
+	for(int j = 1; j <= 13; j++) {
+	    ncard->rank = j;
+	    if(j >= 13) {j = 1;}
+	}
+	for(int k = 1; k <= 5; k++) {
+	    switch(k) {
+	    	case 1 :
+		    ncard->suit = 'C';
+		    break;
+		case 2 :
+		    ncard->suit = 'D';
+		    break;
+		case 3 :
+		    ncard->suit = 'H';
+		    break;
+		case 4 :
+		    ncard->suit = 'S';
+		    break;
+		default :
+		    k = 1;
+	    }
+	}
+    	ncard->next = malloc(sizeof(card));
+	deck[i] = *ncard;
     }
     return deck;
 }
