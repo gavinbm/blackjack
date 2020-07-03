@@ -9,8 +9,7 @@
 	card *dealer;
 	int psize, dsize;
 	
-	while(playing) {
-	
+	do { 	
 		/* Introduction */
 		printf("Welcome to Reno!");	
 
@@ -63,6 +62,8 @@
 
 		}
 
-	}
-	return 0;	
+	} while(playing);
+
+    return 0;	
  }
+

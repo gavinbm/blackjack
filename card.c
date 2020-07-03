@@ -38,34 +38,31 @@ void destroy_deck(card *deck) {
 }
 
 card *make_deck(void) {
-    card *deck = malloc(52 * sizeof(card));
-
+    card *deck = malloc(sizeof(card));
     for(int i = 0; i < 52; i++) {
-    	card *ncard = malloc(sizeof(card));
+    	deck[i].next = malloc(sizeof(card));
 	for(int j = 1; j <= 13; j++) {
-	    ncard->rank = j;
+	    deck[i].rank = j;
 	    if(j >= 13) {j = 1;}
 	}
 	for(int k = 1; k <= 5; k++) {
 	    switch(k) {
 	    	case 1 :
-		    ncard->suit = 'C';
+		    deck[i].suit = 'C';
 		    break;
 		case 2 :
-		    ncard->suit = 'D';
+		    deck[i].suit = 'D';
 		    break;
 		case 3 :
-		    ncard->suit = 'H';
+		    deck[i].suit = 'H';
 		    break;
 		case 4 :
-		    ncard->suit = 'S';
+		    deck[i].suit = 'S';
 		    break;
 		default :
 		    k = 1;
 	    }
 	}
-    	ncard->next = malloc(sizeof(card));
-	deck[i] = *ncard;
     }
     return deck;
 }
