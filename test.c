@@ -1,137 +1,133 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
+typedef struct Card{
 	int rank;
 	char suit;
+	struct Card *next;
 } card;
 
 card *make_deck(void);
 card *shuffle(card *deck);
-card deal(card *deck);
+card *deal(card *deck);
 int count(card *deck);
 int total(card *deck);
 void destroy(card *deck);
 void show(card *deck);
 
 int main() {
-	char *hit;
-	int playing = 1;
-	int psize, dsize;
-	card *deck;
-	card *player;
-	card *dealer;
-
-	while(playing) {
-		deck = make_deck();
-		player = malloc(10 * sizeof(card));
-		dealer = malloc(10 * sizeof(card));
-		player[0] = deal(deck);
-		dealer[0] = deal(deck);
-		psize = count(player);
-		dsize = count(dealer);
-
-		printf("Welcome to Reno!");
-		if(total(dealer) < 16) {
-			while(total(dealer) < 16) {
-				dealer[dsize + 1] = deal(deck);
-				dsize = count(dealer);
-			}
-		}
-
-		show(player);
-		printf("(h)it or (s)tand?\n");
-		scanf("%s", hit);
-
-		if(hit == "h") {
-			while(hit == "h") {
-				player[psize + 1] = deal(deck);
-				psize = count(player);
-				printf("(h)it again?\n");
-				scanf("%s", hit);
-			}
-		}
-
-		if(hit == "s") {
-			int pscore = total(player);
-			int dscore = total(dealer);
-			show(player);
-			show(dealer);
-
-			if(dscore > pscore || dscore == pscore) {printf("dealer wins");}
-			else {printf("player wins");}
-			destroy(deck);
-			destroy(player);
-			destroy(dealer);
-			playing = 0;
-		}
-	}
+	card *deck = make_deck();
+	show(deck);
+	printf("\n");
+	show(shuffle(deck));
 	return 0;
 }
 
 
 card *make_deck() {
-	card *deck = malloc(52 * sizeof(card));
+	int total = 53, number = 1;
+	card *head = NULL;
+	card *tmp = NULL;
+	card *p = NULL;
 
-	for(int i = 0; i < 52; i++) {
-		card *ncard = malloc(sizeof(card));
-
-		for(int j = 0; j < 13; j++) {
-			ncard->rank = j + 1;
+	while(number <= total) {
+		tmp =(card*)malloc(sizeof(card));
+		if(number <= 13) {
+			tmp->rank = number;
+			tmp->suit = 'C';
+		} else if(number > 13 && number <= 26) {
+			tmp->rank = number - 13;
+			tmp->suit = 'H';
+		} else if(number > 26 && number <= 39) {
+			tmp->rank = number - 26;
+			tmp->suit = 'D';
+		} else {
+			tmp->rank = number - 39;
+			tmp->suit = 'S';
 		}
 
-		for(int k = 0; k < 4; k++) {
-			if(k == 0) {ncard->suit = 'C';}
-			else if(k == 1) {ncard->suit = 'H';}
-			else if(k == 2) {ncard->suit = 'D';}
-			else if(k == 3) {ncard->suit = 'S';k = 0;}
-		}
+		tmp->next = NULL;
 
-		deck[i] = *ncard;
+		if(head == NULL) {
+			head = tmp;
+		} else {
+			p = head;
+			while(p->next != NULL) {
+				p = p->next;
+			}
+			p->next = tmp;
+		}
+		number++;
 	}
-	return deck;
+	return head;
 }
 
 card *shuffle(card *deck) {
-	card tmp;
-	int j;
-	for(int i = 0; i < 52; i++) {
-		j = rand() % 52;
-		tmp = deck[i];
-		deck[i] = deck[j];
-		deck[j] = tmp;
+	card *ndeck[52];
+	//filling the ndeck array
+	for(card *tmp = deck; deck->next != NULL; tmp = tmp->next) {
+		int i = 0;
+		ndeck[i] = tmp;
+		i++;	
 	}
-	return deck;
+	//randomizing ndeck array
+	for(int i = 0; i < 52; i++) {
+		int j = rand() % 52;
+		card *tmp = ndeck[j];
+		ndeck[j] = ndeck[i];
+		ndeck[i] = tmp;
+	}
+	//making new list out of ndeck array
+	card *head = ndeck[0]; 
+	for(int i = 1; i < 52; i++) {
+		head->next = ndeck[i];
+	}
+	return head;
 }
 
-card deal(card *deck) {
-	card *ret = malloc(sizeof(card));
-	int size = count(deck);
-	ret[0] = deck[size - 1];
-	return *ret;
+card *deal(card *deck) {
+	card *ret = (card*)malloc(sizeof(card));
+
+	for(card *tmp = deck; deck->next != NULL; tmp = tmp->next) {
+		if(tmp->next == NULL) {
+			ret = tmp;
+			ret->next = malloc(sizeof(card));
+			deck = NULL;
+		}
+	}
+	return ret;
 }
 
 int count(card *deck) {
-	return sizeof(deck) / sizeof(card);
+	int count = 0;
+	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
+		count++;
+	}
+	return count;
 }
 
 int total(card *deck) {
-	int add, ret = 0, size = count(deck);
-	for(int i = 0; i < size; i++) {
-		if(deck[i].rank > 10) {add = 10;}
-		else {add = deck[i].rank;}
+	int add, ret = 0;
+	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
+		if(tmp->rank > 10) {add = 10;}
+		else {add = tmp->rank;}
 		ret = ret + add;
 	}
 	return ret;
 }
 
 void show(card *deck) {
-	int size = count(deck);
-	for(int i = 0; i < size; i++) {
-		printf("%d%c", deck[i].rank, deck[i].suit);
+	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
+		printf("%d%c\n", tmp->rank, tmp->suit);
 	}
 }
 
 void destroy(card *deck) {
-	free(deck);
+	card *curr = deck;
+	card *next = curr;
+	while(curr != NULL) {
+		next = curr->next;
+		free(curr);
+		curr = next;
+	}
 }
