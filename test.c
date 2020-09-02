@@ -17,9 +17,7 @@ void show(card *deck);
 
 int main() {
 	card *deck = make_deck();
-	show(deck);
-	printf("\n");
-	show(shuffle(deck));
+	shuffle(deck);
 	return 0;
 }
 
@@ -72,10 +70,11 @@ card *shuffle(card *deck) {
 	}
 	//randomizing ndeck array
 	for(int i = 0; i < 52; i++) {
-		int j = rand() % 52;
+		int j = rand() % 53;
 		card *tmp = ndeck[j];
 		ndeck[j] = ndeck[i];
 		ndeck[i] = tmp;
+		printf("%d%c\n", ndeck[i]->rank, ndeck[i]->suit);
 	}
 	//making new list out of ndeck array
 	card *head = ndeck[0]; 
