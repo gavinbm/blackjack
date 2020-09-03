@@ -68,18 +68,19 @@ card *shuffle(card *deck) {
 		ndeck[i] = tmp;
 		i++;	
 	}
-	//randomizing ndeck array
+	/*//randomizing ndeck array
 	for(int i = 0; i < 51; i++) {
 		int j = i + rand() / (52/(52-i) + 1);
 		card *tmp = ndeck[j];
 		ndeck[j] = ndeck[i];
 		ndeck[i] = tmp;
 		printf("%d%c\n", ndeck[i]->rank, ndeck[i]->suit);
-	}
+	}*/
 	//making new list out of ndeck array
 	card *head = ndeck[0]; 
 	for(int i = 1; i < 52; i++) {
 		head->next = ndeck[i];
+		printf("%d%c\n", head->rank, head->suit);
 	}
 	return head;
 }
