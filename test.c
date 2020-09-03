@@ -69,8 +69,8 @@ card *shuffle(card *deck) {
 		i++;	
 	}
 	//randomizing ndeck array
-	for(int i = 0; i < 52; i++) {
-		int j = rand() % 53;
+	for(int i = 0; i < 51; i++) {
+		int j = i + rand() / (52/(52-i) + 1);
 		card *tmp = ndeck[j];
 		ndeck[j] = ndeck[i];
 		ndeck[i] = tmp;
