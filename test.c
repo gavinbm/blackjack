@@ -62,11 +62,12 @@ card *make_deck() {
 
 card *shuffle(card *deck) {
 	card *ndeck[52];
+	int c = 0;
 	//filling the ndeck array
-	for(card *tmp = deck; deck->next != NULL; tmp = tmp->next) {
-		int i = 0;
-		ndeck[i] = tmp;
-		i++;	
+	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
+		ndeck[c] = tmp;
+		c++;
+		printf("%d%c\n", ndeck[c]->rank, ndeck[c]->suit);	
 	}
 	/*//randomizing ndeck array
 	for(int i = 0; i < 51; i++) {
@@ -76,12 +77,13 @@ card *shuffle(card *deck) {
 		ndeck[i] = tmp;
 		printf("%d%c\n", ndeck[i]->rank, ndeck[i]->suit);
 	}*/
-	//making new list out of ndeck array
+	//making new linked list out of ndeck array
+	printf("\n");
 	card *head = ndeck[0]; 
 	for(int i = 1; i < 52; i++) {
 		head->next = ndeck[i];
-		printf("%d%c\n", head->rank, head->suit);
 	}
+	show(head);
 	return head;
 }
 
