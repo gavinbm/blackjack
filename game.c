@@ -8,10 +8,10 @@
 	card *player;
 	card *dealer;
 	int psize, dsize;
-
-	printf("testing make_deck() and show()");	
-	deck = make_deck();
-	show(deck);
+	
+	deck = shuffle(make_deck());
+	player = deal(deck);
+	show(player);
 
 	return 0;	
  }

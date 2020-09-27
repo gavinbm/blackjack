@@ -1,70 +1,78 @@
 #include "card.h"
 
-void remove_element(card *deck, int index, int size)
-{
-   int i;
-   for(i = index; i < size - 1; i++) deck[i] = deck[i + 1];
-}
-
 void show(card *deck) {
-    int size = count_deck(deck);
-    for(int i = 0; i < size; i++) {
-        printf("%d%c ", deck[i].rank,deck[i].suit);
-    }
+	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
+		printf("%d%c\n", tmp->rank, tmp->suit);
+	}
 }
 
-int total(card *card) {
-    int add, ret = 0;
-    int size = count_deck(card);
-    for(int i = 0; i < size; i++) {
-        if(card[i].rank > 10) {add = 10;}
-        else {add = card[i].rank;}
-        ret += add;
-    }
-    return ret;
+int total(card *deck) {
+	int add, ret = 0;
+	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
+		if(tmp->rank > 10) {add = 10;}
+		else {add = tmp->rank;}
+		ret = ret + add;
+	}
+	return ret;
 }
 
 card *deal(card *deck) {
-    int size = count_deck(deck);
-    card ncard = deck[size];
-    printf("%d%c ", ncard.rank, ncard.suit);
-    remove_element(deck, size, size);
-    card *p2c = &ncard;
-    return p2c;
+	card *ret;
+
+	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
+		if(tmp->next == NULL) {
+			ret = tmp;
+		}
+	}
+	return ret;
 }
 
-void destroy_deck(card *deck) {
-    free(deck);
+void destroy(card *deck) {
+	card *curr = deck;
+	card *next = curr;
+	while(curr != NULL) {
+		next = curr->next;
+		free(curr);
+		curr = next;
+	}
 }
 
-card *make_deck(void) {
-    card *deck = malloc(sizeof(card));
-    for(int i = 0; i < 52; i++) {
-    	deck[i].next = malloc(sizeof(card));
-	for(int j = 1; j <= 13; j++) {
-	    deck[i].rank = j;
-	    if(j >= 13) {j = 1;}
+card *make_deck() {
+	int total = 53, number = 1;
+	card *head = NULL;
+	card *tmp = NULL;
+	card *p = NULL;
+
+	while(number <= total) {
+		tmp =(card*)malloc(sizeof(card));
+		if(number <= 13) {
+			tmp->rank = number;
+			tmp->suit = 'C';
+		} else if(number > 13 && number <= 26) {
+			tmp->rank = number - 13;
+			tmp->suit = 'H';
+		} else if(number > 26 && number <= 39) {
+			tmp->rank = number - 26;
+			tmp->suit = 'D';
+		} else {
+			tmp->rank = number - 39;
+			tmp->suit = 'S';
+		}
+
+		tmp->next = NULL;
+
+		if(head == NULL) {
+			head = tmp;
+		} else {
+			p = head;
+			while(p->next != NULL) {
+				p = p->next;
+			}
+			p->next = tmp;
+		}
+		number++;
 	}
-	for(int k = 1; k <= 5; k++) {
-	    switch(k) {
-	    	case 1 :
-		    deck[i].suit = 'C';
-		    break;
-		case 2 :
-		    deck[i].suit = 'D';
-		    break;
-		case 3 :
-		    deck[i].suit = 'H';
-		    break;
-		case 4 :
-		    deck[i].suit = 'S';
-		    break;
-		default :
-		    k = 1;
-	    }
-	}
-    }
-    return deck;
+	return head;
 }
 
 /* counts the number of cards in the list headed by "deck" */

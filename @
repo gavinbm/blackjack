@@ -17,7 +17,8 @@ void show(card *deck);
 
 int main() {
 	card *deck = make_deck();
-	shuffle(deck);
+	card *player = deal(deck);
+	show(player);
 	return 0;
 }
 
@@ -61,43 +62,28 @@ card *make_deck() {
 }
 
 card *shuffle(card *deck) {
-	card *ndeck[52];
-	int c = 0;
-	//filling the ndeck array
-	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
-		ndeck[c] = tmp;
-		c++;
-		printf("%d%c\n", ndeck[c]->rank, ndeck[c]->suit);	
+	card tmp;
+	int j;
+	for(int i = 0; i < 52; i++) {
+		j = rand() % 52;
+		tmp = deck[i];
+		deck[i] = deck[j];
+		deck[j] = tmp;
 	}
-	/*//randomizing ndeck array
-	for(int i = 0; i < 51; i++) {
-		int j = i + rand() / (52/(52-i) + 1);
-		card *tmp = ndeck[j];
-		ndeck[j] = ndeck[i];
-		ndeck[i] = tmp;
-		printf("%d%c\n", ndeck[i]->rank, ndeck[i]->suit);
-	}*/
-	//making new linked list out of ndeck array
-	printf("\n");
-	card *head = ndeck[0]; 
-	for(int i = 1; i < 52; i++) {
-		head->next = ndeck[i];
-	}
-	show(head);
-	return head;
+	return deck;
 }
 
 card *deal(card *deck) {
-	card *ret = (card*)malloc(sizeof(card));
+	card *tmp = malloc(sizeof(card));
 
-	for(card *tmp = deck; deck->next != NULL; tmp = tmp->next) {
-		if(tmp->next == NULL) {
-			ret = tmp;
-			ret->next = malloc(sizeof(card));
-			deck = NULL;
+	for(int i = 0; i <= 52; i++) {
+		if(deck->next->next = NULL) {
+			tmp = deck->next;
+			tmp->next = malloc(sizeof(card));
+			deck->next = NULL;	
 		}
 	}
-	return ret;
+	return tmp;
 }
 
 int count(card *deck) {
@@ -120,7 +106,7 @@ int total(card *deck) {
 
 void show(card *deck) {
 	for(card *tmp = deck; tmp->next != NULL; tmp = tmp->next) {
-		printf("%d%c\n", tmp->rank, tmp->suit);
+		printf("%d%c ", tmp->rank, tmp->suit);
 	}
 }
 
